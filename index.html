@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <script src="js/webview.js"></script>
+</head>
+<body style="background: white;">
+    <h1>Hello World!</h1>
+    <p>
+        We are using node <script>document.write(process.versions.node)</script>,
+        Chrome <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>.
+    </p>
+    <div>
+
+      <br><br>
+      <button id="screenshot">Print Screenshot</button>
+      <canvas id="canvas"></canvas>
+      <br><br>
+      <script>
+         let os = require('os');
+         let qrcode = require('qrcode');
+         const userData = 'USER NAME: ' + 'Jarett Collins' + '<br>' +
+         'OPERATING SYSTEM: ' + os.platform() + '<br>' +
+         'MAC ADDRESS: ' + os.networkInterfaces().en0[0].mac + '<br>' +
+         'IP ADDRESS: ' + os.networkInterfaces().en0[1].address + '<br>' +
+         'RAM: ' + process.getSystemMemoryInfo().total / 1024 / 1024 + ' GB' + '<br>';
+         document.write(userData);
+
+          qrcode.toCanvas(document.getElementById('canvas'),
+            userData, { toSJISFunc: qrcode.toSJIS }, function (error) {
+            if (error) console.error(error)
+            console.log('success!')
+          });
+      </script>
+      <div class="indicator"></div>
+
+      <!-- Webview -->
+      <div>
+      <webview
+        id="webview"
+        autosize="on"
+        src="https://twitter.com/bbcafrica"
+        data-home="https://twitter.com/bbcafrica">
+      </webview>
+      <webview
+        id="webview"
+        autosize="on"
+        src="https://twitter.com/ethereum"
+        data-home="https://twitter.com/ethereum">
+      </webview>
+      </div>
+    </div>
+</body>
+</html>
