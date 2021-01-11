@@ -5,53 +5,77 @@
     <title>Hello World!</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <script src="js/webview.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body style="background: white;">
     <h1>Hello World!</h1>
-    <p>
-        We are using node <script>document.write(process.versions.node)</script>,
-        Chrome <script>document.write(process.versions.chrome)</script>,
-        and Electron <script>document.write(process.versions.electron)</script>.
-    </p>
     <div>
+      <div class="qrcodes">
+        <p id="name"></p>
+        <canvas id="nameQR"></canvas>
+      </div>
+      <div class="qrcodes">
+        <p id="machine"></p>
+        <canvas id="machineQR"></canvas>
+      </div>
+      <div class="qrcodes">
+        <p id="macaddress"></p>
+        <canvas id="macaddressQR"></canvas>
+      </div>
+      <div class="qrcodes">
+        <p id="crypto"></p>
+        <canvas id="cryptoQR"></canvas>
+      </div>
 
-      <br><br>
+      <p>
+        <a href="https://twitter.com/bbcafrica?lang=en" target="_blank">BBC Africa</a>
+      </p>
+      <p>
+        <a href="https://twitter.com/ethereum?lang=en" target="_blank">Ethereum</a>
+      </p>
+      <br>
       <button id="screenshot">Print Screenshot</button>
-      <canvas id="canvas"></canvas>
-      <br><br>
+
       <script>
          let os = require('os');
          let qrcode = require('qrcode');
-         const userData = 'USER NAME: ' + 'Jarett Collins' + '<br>' +
-         'OPERATING SYSTEM: ' + os.platform() + '<br>' +
-         'MAC ADDRESS: ' + os.networkInterfaces().en0[0].mac + '<br>' +
-         'IP ADDRESS: ' + os.networkInterfaces().en0[1].address + '<br>' +
-         'RAM: ' + process.getSystemMemoryInfo().total / 1024 / 1024 + ' GB' + '<br>';
-         document.write(userData);
 
-          qrcode.toCanvas(document.getElementById('canvas'),
-            userData, { toSJISFunc: qrcode.toSJIS }, function (error) {
+         const { shell } = require("electron");
+         const nameData = 'John Doe';
+         const machineData = 'OS: ' + os.platform() +  '<br>' + 'RAM: ' + process.getSystemMemoryInfo().total / 1024 / 1024 + ' GB' + '<br>' + 'IP Address: ' + os.networkInterfaces().en0[1].address + '<br>';
+         const macaddressData = 'Mac Address: ' + os.networkInterfaces().en0[0].mac;
+
+         //Name Data
+          qrcode.toCanvas(document.getElementById('nameQR'),
+            nameData, { toSJISFunc: qrcode.toSJIS }, function (error) {
             if (error) console.error(error)
             console.log('success!')
           });
-      </script>
-      <div class="indicator"></div>
+          document.getElementById('name').innerHTML = nameData;
 
-      <!-- Webview -->
-      <div>
-      <webview
-        id="webview"
-        autosize="on"
-        src="https://twitter.com/bbcafrica"
-        data-home="https://twitter.com/bbcafrica">
-      </webview>
-      <webview
-        id="webview"
-        autosize="on"
-        src="https://twitter.com/ethereum"
-        data-home="https://twitter.com/ethereum">
-      </webview>
-      </div>
+          // Computer Data
+          qrcode.toCanvas(document.getElementById('machineQR'),
+            machineData, { toSJISFunc: qrcode.toSJIS }, function (error) {
+            if (error) console.error(error)
+            console.log('success!')
+          });
+          document.getElementById('machine').innerHTML = machineData;
+
+          // Mac Address Data
+          qrcode.toCanvas(document.getElementById('macaddressQR'),
+            macaddressData, { toSJISFunc: qrcode.toSJIS }, function (error) {
+            if (error) console.error(error)
+            console.log('success!')
+          });
+          document.getElementById('macaddress').innerHTML = macaddressData;
+
+          document.body.addEventListener('click', event => {
+            if (event.target.tagName.toLowerCase() === 'a' && event.target.protocol != 'file:') {
+              event.preventDefault();
+              shell.openExternal(event.target.href);
+            }
+          });
+      </script>
     </div>
 </body>
 </html>

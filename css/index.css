@@ -1,0 +1,7 @@
+html, body {
+
+}
+.qrcodes {
+  display: inline-block;
+  padding: 1rem;
+}
