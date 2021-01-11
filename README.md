@@ -3,5 +3,9 @@ Node Version: v13.2.1
 
 ## How do I run this project?
 At the root of the directory, type the following commands:
-```npm install
-```npm start
+```bash
+npm install
+```
+```bash
+npm start
+```
